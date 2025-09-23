@@ -3,33 +3,33 @@
 ## Table of Contents
 
 - [Express backend](#express-backend)
-  - [Table of Contents](#table-of-contents)
-  - [Initialize Express app](#initialize-express-app)
-  - [.env](#.env)
-  - [Server.js](#server.js)
-  - [Routes](#routes)
-    - [home.js](#home.js)
-    - [notesRouter.js](#notesrouter.js)
-    - [user.js](#user.js)
-    - [Images.js (Optional)](#images.js-(optional))
-  - [Controllers](#controllers)
-    - [notesController.js](#notescontroller.js)
-    - [userController.js](#usercontroller.js)
-    - [Image/fileController.js (Optional)](#image/filecontroller.js-(optional))
-  - [Model](#model)
-    - [notesModel.js](#notesmodel.js)
-  - [userModel.js](#usermodel.js)
-    - [Image/fileController.js](#image/filecontroller.js)
-  - [Middleware](#middleware)
-    - [requireAuth.js](#requireauth.js)
-    - [multerConfig.js (Optional)](#multerconfig.js-(optional))
-  - [Enhancements](#enhancements)
-    - [API Prefixing](#api-prefixing)
-    - [HTTP Status Codes](#http-status-codes)
-    - [Security Enhancements](#security-enhancements)
-    - [Centralized Error Handling](#centralized-error-handling)
-    - [Asynchronous Error Handling](#asynchronous-error-handling)
-    - [Input Validation](#input-validation)
+   * [Table of Contents](#table-of-contents)
+   * [Initialize Express app](#initialize-express-app)
+   * [.env](#env)
+   * [Server.js](#serverjs)
+   * [Routes](#routes)
+      + [home.js](#homejs)
+      + [notesRouter.js](#notesrouterjs)
+      + [user.js](#userjs)
+      + [Images.js (Optional)](#imagesjs-optional)
+   * [Controllers](#controllers)
+      + [notesController.js](#notescontrollerjs)
+      + [userController.js](#usercontrollerjs)
+      + [Image/fileController.js (Optional)](#imagefilecontrollerjs-optional)
+   * [Model](#model)
+      + [notesModel.js](#notesmodeljs)
+      + [userModel.js](#usermodeljs)
+      + [Image/fileController.js](#imagefilecontrollerjs)
+   * [Middleware](#middleware)
+      + [requireAuth.js](#requireauthjs)
+      + [multerConfig.js (Optional)](#multerconfigjs-optional)
+   * [Enhancements](#enhancements)
+      + [API Prefixing](#api-prefixing)
+      + [HTTP Status Codes](#http-status-codes)
+      + [Security Enhancements](#security-enhancements)
+      + [Centralized Error Handling](#centralized-error-handling)
+      + [Asynchronous Error Handling](#asynchronous-error-handling)
+      + [Input Validation](#input-validation)
 
 
 
@@ -678,7 +678,7 @@ Other useful field types you can add in Mongoose:
 - Enum (restrict string/number to specific values).
 
 
-## userModel.js
+### userModel.js
 
 ```js
 const mongoose = require('mongoose')
@@ -1049,4 +1049,5 @@ While the userController checks for some empty fields, it's a good practice to u
 **Made with ❤️ by Manpreet Singh**
 
 LinkedIn -: https://www.linkedin.com/in/manpreetsingh18-ufv/
+
 
