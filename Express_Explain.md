@@ -25,6 +25,7 @@
     - [multerConfig.js (Optional)](#multerconfig.js-(optional))
   - [Enhancements](#enhancements)
     - [API Prefixing](#api-prefixing)
+    - [HTTP Status Codes](#http-status-codes)
     - [Security Enhancements](#security-enhancements)
     - [Centralized Error Handling](#centralized-error-handling)
     - [Asynchronous Error Handling](#asynchronous-error-handling)
@@ -48,7 +49,14 @@ This will install express
 ```bash
 npm run dev
 ```
-to run 
+to run. in `package.json` you can find the script -:
+
+```js
+"scripts": {
+  "dev": "nodemon server.js"
+}
+```
+`nodemon` is also a dependency which keeps the code updated and loads the server up automatically with changes without you manually closing and restarting the server.
 
 ```bash
 npm install
@@ -56,6 +64,8 @@ npm install
 to install all the dependencies
 
 ## .env
+
+
 For this file we will keep it in this format
 
 ```js
@@ -63,6 +73,8 @@ PORT=
 MONGOURI=
 SECRET=
 ```
+
+**Always Keep this file in .gitignore!!. This file should not be pushed to any repo. Additionaly put node_modules folder in .gitignore too**
 
 ## Server.js
 
@@ -285,7 +297,7 @@ const createNote = async(req, res) => {
         const user_id = req.user._id
         const note = await Note.create({title, description, pinned, user_id})
 
-        res.status(200).json({
+        res.status(201).json({
           message: "Note Added",
           note: note
         })
@@ -364,6 +376,8 @@ This is first gonna take the notes model because based on it defines the schema 
 - findByIdAndUpdate(id,{...},{new:true}) → update a note and return updated version.
 
 - emptyFields.push('title') → collects missing fields so you can tell the frontend what’s missing.
+
+- `const user_id = req.user._id` → This line retrieves the logged-in user's ID. The req.user object was attached to the request earlier by the `requireAuth` middleware after it successfully verified the user's JWT token.
 
 
 ### userController.js
@@ -961,6 +975,14 @@ app.use('/api', userRoute)
 app.use('/api/notes', notesRoute)
 ```
 
+### HTTP Status Codes
+
+- `createNote` returns a 200 OK status.
+
+- `createImage` returns a 201 Created status.
+
+The standard practice for a POST request that successfully creates a new resource is 201 Created. 
+
 ### Security Enhancements
 
 You could add a section on basic security practices. A great and easy-to-implement library is helmet. It applies several important HTTP headers to protect your app from common vulnerabilities like Cross-Site Scripting (XSS) and click-jacking. You can also mention rate-limiting using a package like express-rate-limit to prevent brute-force attacks on login endpoints.
@@ -969,11 +991,57 @@ You could add a section on basic security practices. A great and easy-to-impleme
 
 Instead of handling errors only within try/catch blocks in controllers, you can create a dedicated error-handling middleware. This middleware would sit at the end of your server.js file and catch any errors passed to next(error), ensuring all errors are handled consistently and preventing sensitive stack traces from being sent to the user in production.
 
+```js
+// Place after all your app.use() routes
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send({ error: 'Something went wrong!' });
+});
+```
+
 ### Asynchronous Error Handling
 The guide uses async/await which is great, but unhandled promise rejections can crash your Node.js process. You can wrap your asynchronous route handlers with a utility function that catches errors and passes them to your centralized error handler using next(). Libraries like express-async-errors can do this automatically for all your routes with just one line of code in server.js.
 
+**Using external Library**
+
+```bash
+npm install express-async-errors
+```
+
+in server.js at top
+```js
+require('express-async-errors');
+```
+
+**Manual Method**
+
+The idea is to create a small helper function that "wraps" your asynchronous route controllers. This wrapper function's only job is to add a .catch(next) to your controller logic, ensuring any error gets passed along to Express for proper handling.
+
+Here's the code for the wrapper function. You could create a new file like utils/catchAsync.js for it:
+
+```js
+// utils/catchAsync.js
+
+const catchAsync = (fn) => {
+  return (req, res, next) => {
+    fn(req, res, next).catch(next);
+  };
+};
+
+module.exports = catchAsync;
+```
+
+Then in your routes files add this 
+
+```js
+const catchAsync = require('../utils/catchAsync');
+
+// And wrap the controller around it
+router.get('/', catchAsync(getNotes));
+```
+
 ### Input Validation
-While the userController checks for some empty fields, it's a good practice to use a dedicated validation library like express-validator or zod. This allows you to create powerful, reusable validation rules for incoming request bodies (req.body), query parameters (req.query), and URL parameters (req.params) to ensure data is clean and in the correct format before it ever reaches your controller logic.
+While the userController checks for some empty fields, it's a good practice to use a dedicated validation library like `express-validator` or `zod`. This allows you to create powerful, reusable validation rules for incoming request bodies (req.body), query parameters (req.query), and URL parameters (req.params) to ensure data is clean and in the correct format before it ever reaches your controller logic.
 
 ***
 
