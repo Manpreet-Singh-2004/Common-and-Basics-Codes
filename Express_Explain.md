@@ -11,12 +11,15 @@
     - [home.js](#home.js)
     - [notesRouter.js](#notesrouter.js)
     - [user.js](#user.js)
+    - [Images.js (Optional)](#images.js-(optional))
   - [Controllers](#controllers)
     - [notesController.js](#notescontroller.js)
     - [userController.js](#usercontroller.js)
+    - [Image/fileController.js (Optional)](#image/filecontroller.js-(optional))
   - [Model](#model)
     - [notesModel.js](#notesmodel.js)
   - [userModel.js](#usermodel.js)
+    - [Image/fileController.js](#image/filecontroller.js)
   - [Middleware](#middleware)
     - [requireAuth.js](#requireauth.js)
     - [multerConfig.js (Optional)](#multerconfig.js-(optional))
@@ -436,7 +439,7 @@ const signupUser = async (req, res) => {
 }
 ```
 
-### Image/fileController.js
+### Image/fileController.js (Optional)
 
 imageController.js manages the multer files, bellow is an example of it
 
