@@ -38,7 +38,7 @@
 ```bash
 npm init -y
 ```
-This will install Node and package.json type files
+This will install Node and package.json files
 
 ```bash
 npm install express
@@ -49,7 +49,7 @@ This will install express
 ```bash
 npm run dev
 ```
-to run. in `package.json` you can find the script -:
+to run. In `package.json` you can find the script -:
 
 ```js
 "scripts": {
@@ -66,15 +66,16 @@ to install all the dependencies
 ## .env
 
 
-For this file we will keep it in this format
+For this file, we will keep it in this format
 
 ```js
 PORT=
 MONGOURI=
 SECRET=
 ```
+*Note -: For a JWT using the HS256 algorithm, your secret should be a cryptographically secure, randomly generated string of at least 64 hexadecimal characters (which corresponds to 256 bits).*
 
-**Always Keep this file in .gitignore!!. This file should not be pushed to any repo. Additionaly put node_modules folder in .gitignore too**
+**Always keep this file in .gitignore!!. This file should not be pushed to any repo. Additionally, put node_modules folder in .gitignore too**
 
 ## Server.js
 
@@ -119,15 +120,15 @@ mongoose.connect(process.env.MONGOURI)
 		console.log(error)
 	})
 ```
-`routes` will add routes, and then you can point it towards your custom path, like notes are at `/notes` path meaning at http://localhost:4000/notes . but for APIs its better to use a api/notes to ensure the safety of app.
+`routes` will add routes, and then you can point it towards your custom path, like notes are at `/notes` path, meaning at http://localhost:4000/notes . but for APIs, it's better to use an api/notes to ensure the safety of app.
 
-**Note -:** in `.env` file i have specified a specific port to use and that port is 4000 in my case, the default port of express is 3000.
+**Note -:** in `.env` file I have specified a specific port to use, and that port is 4000 in my case; the default port of express is 3000.
 
 `process.env.MONGOURI` or `process.env.PORT` will take the value from .env file and just process them.
 
 ## Routes
 
-To create routes we will use a seperate folder
+To create routes, we will use a separate folder
 
 ### home.js
 
@@ -182,7 +183,7 @@ router.patch('/:id', updateNote)
 module.exports = router
 ```
 
-for this route, we are using controllers and then using it in the routes and specifing the functions.
+For this route, we are using controllers and then using them in the routes and specifying the functions.
 
 ### user.js
 
@@ -243,7 +244,7 @@ module.exports = router
 ```
 
 ## Controllers
-Again making a new folder for the `controllers`, this is the functions that the `routes` folder is using
+Again, making a new folder for the `controllers`, this is the functions that the `routes` folder is using
 
 ### notesController.js
 
@@ -271,7 +272,7 @@ const getNote = async(req, res) =>{
     const note = await Note.findById(id)
     
     if (!note){
-        return res.status(404).json({error: "No suck note exist"})
+        return res.status(404).json({error: "No such note exist"})
     }
 
     res.status(200).json(note)
@@ -357,9 +358,9 @@ module.exports = {
 }
 ```
 
-This is first gonna take the notes model because based on it defines the schema of our notes database. Almost all if not all functions in this is going to be async in nature.
+This is first gonna take the notes model because it defines the schema of our notes database. Almost all, if not all, functions in this are going to be async in nature.
 
-- const user_id = req.user._id → gets the logged-in user’s id to link notes to them.
+- const user_id = req.user._id → gets the logged-in user’s ID to link notes to them.
 
 - ...req.body → spread operator, copies all fields from request body into the update (handy, but risky if user sends unwanted fields).
 
@@ -435,7 +436,7 @@ const signupUser = async(req, res)=>{
 module.exports = {signupUser, loginUser}
 ```
 
-- createToken(_id) → generates a JWT signed with user’s _id, secret key, and expires in 3 days.
+- createToken(_id) → generates a JWT signed with the user’s _id, secret key, and expires in 3 days.
 
 - loginUser → takes email + password, calls User.login (custom static method on model), and if valid, returns a JWT plus user info.
 
@@ -444,7 +445,7 @@ module.exports = {signupUser, loginUser}
 - Both functions wrap logic in try/catch for error handling.
 
 
-*Note -: If you want to add user name into it then you can do the following*
+*Note -: If you want to add a user name to it, then you can do the following*
 
 ```js
 const signupUser = async (req, res) => {
@@ -463,7 +464,7 @@ const signupUser = async (req, res) => {
 
 ### Image/fileController.js (Optional)
 
-imageController.js manages the multer files, bellow is an example of it
+imageController.js manages the multer files. Below is an example of it
 
 ```js
 const { json } = require('express')
@@ -615,7 +616,7 @@ module.exports = {
 
 ## Model
 
-Create a folder witht the name `models`
+Create a folder with the name `models`
 
 ### notesModel.js
 
@@ -719,7 +720,7 @@ userSchema.statics.login = async function(email, password){
     if(!match){
         throw Error('Incorrect password')
     }
-    return {message: "User Loggedin successfully", user}
+    return {message: "User Logged in successfully", user}
 }
 
 
@@ -768,7 +769,7 @@ login static method:
 
 - Finds user by email.
 
-- Uses bcrypt.compare to check hashed password.
+- Uses bcrypt.compare to check the hashed password.
 
 - Throws errors if invalid, else returns user + success message.
 
@@ -776,15 +777,15 @@ signup static method:
 
 - Validates required fields.
 
-- Uses validator to check email format and strong password.
+- Uses a validator to check email format and a strong password.
 
 - Ensures email is unique.
 
 - Hashes password with bcrypt before saving.
 
-- Creates new user and returns it with success message.
+- Creates a new user and returns it with a success message.
 
-*Note -: if you want to add the name as well check out the code bellow*
+*Note -: if you want to add the name as well, check out the code below*
 
 ```js
 userSchema.statics.signup = async function(name, email, password) {
@@ -901,11 +902,11 @@ module.exports = requireAuth
 ```js
 const requireAuth = require('../middleware/requireAuth')
 ```
-*at the top of the routes, thats so that the requireAuth can run first and protect the api/notes routes from unauth requests*
+*at the top of the routes, that's so that the requireAuth can run first and protect the api/notes routes from unauth requests*
 
 ### multerConfig.js (Optional)
 
-middleware for app to use storage
+middleware for the app to use storage
 
 ```js
 const multer = require('multer');
@@ -985,7 +986,7 @@ The standard practice for a POST request that successfully creates a new resourc
 
 ### Security Enhancements
 
-You could add a section on basic security practices. A great and easy-to-implement library is helmet. It applies several important HTTP headers to protect your app from common vulnerabilities like Cross-Site Scripting (XSS) and click-jacking. You can also mention rate-limiting using a package like express-rate-limit to prevent brute-force attacks on login endpoints.
+You could add a section on basic security practices. A great and easy-to-implement library is Helmet. It applies several important HTTP headers to protect your app from common vulnerabilities like Cross-Site Scripting (XSS) and click-jacking. You can also mention rate-limiting using a package like express-rate-limit to prevent brute-force attacks on login endpoints.
 
 ### Centralized Error Handling
 
@@ -1000,7 +1001,7 @@ app.use((err, req, res, next) => {
 ```
 
 ### Asynchronous Error Handling
-The guide uses async/await which is great, but unhandled promise rejections can crash your Node.js process. You can wrap your asynchronous route handlers with a utility function that catches errors and passes them to your centralized error handler using next(). Libraries like express-async-errors can do this automatically for all your routes with just one line of code in server.js.
+The guide uses async/await, which is great, but unhandled promise rejections can crash your Node.js process. You can wrap your asynchronous route handlers with a utility function that catches errors and passes them to your centralized error handler using next(). Libraries like express-async-errors can do this automatically for all your routes with just one line of code in server.js.
 
 **Using external Library**
 
@@ -1008,7 +1009,7 @@ The guide uses async/await which is great, but unhandled promise rejections can 
 npm install express-async-errors
 ```
 
-in server.js at top
+in server.js at the top
 ```js
 require('express-async-errors');
 ```
@@ -1031,7 +1032,7 @@ const catchAsync = (fn) => {
 module.exports = catchAsync;
 ```
 
-Then in your routes files add this 
+Then, in your routes files, add this 
 
 ```js
 const catchAsync = require('../utils/catchAsync');
@@ -1047,4 +1048,5 @@ While the userController checks for some empty fields, it's a good practice to u
 
 **Made with ❤️ by Manpreet Singh**
 
-Linked in -: https://www.linkedin.com/in/manpreetsingh18-ufv/
+LinkedIn -: https://www.linkedin.com/in/manpreetsingh18-ufv/
+
