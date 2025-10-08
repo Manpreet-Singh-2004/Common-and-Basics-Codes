@@ -515,9 +515,45 @@ export async function generateMetadata({ params }){
 
 ## Auth
 
+Using this package
+```bash
+npm install next-auth@beta
+```
+then to create a .env.local file with the secret we will use the command
+```bash
+npx auth secret
+```
+
 https://authjs.dev/getting-started/migrating-to-v5
 
 OAuth providers
 
 https://authjs.dev/getting-started/authentication/oauth
 
+we are using github as a provider for this so we'll got to GitHub then 
+
+https://github.com/settings/developers
+
+Then go to the OAuth Apps and create a new app and copy paste the 
+`AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET`
+
+then we'll use the code
+
+for auth.ts
+```tsx
+import NextAuth from "next-auth"
+import GitHub from "next-auth/providers/github"
+ 
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  providers: [GitHub],
+})
+```
+
+and api/auth/[...nextauth]
+
+```tsx
+import { handlers } from "@/auth"
+
+export const {GET, POST} = handlers
+
+```
