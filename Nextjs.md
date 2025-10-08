@@ -517,3 +517,7 @@ export async function generateMetadata({ params }){
 
 https://authjs.dev/getting-started/migrating-to-v5
 
+OAuth providers
+
+https://authjs.dev/getting-started/authentication/oauth
+
