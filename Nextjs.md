@@ -515,5 +515,5 @@ export async function generateMetadata({ params }){
 
 ## Auth
 
-https://authjs.dev/getting-started/migrating-to-v5?utm_source=chatgpt.com
+https://authjs.dev/getting-started/migrating-to-v5
 
