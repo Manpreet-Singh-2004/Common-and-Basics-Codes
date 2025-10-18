@@ -1,4 +1,4 @@
-# Next.js
+# Next.js Basics
 
 - [Next.js](#nextjs)
    * [Initializing](#initializing)
