@@ -17,6 +17,8 @@
       + [Loading](#loading)
       + [Trending movies, usEffect and Debouncer](#trending-movies-useffect-and-debouncer)
       + [main body section](#main-body-section)
+   * [State Management (Zustand)](#state-management-zustand)
+      + [Nested States (Immer)](#nested-states-immer)
 
 ## ENV setup
 
@@ -732,3 +734,229 @@ Success → map through movieList and render `<MovieCard />` for each movie.
 key={movie.id} → unique key for React list rendering.
 
 `<MovieCard /> ` → custom component that displays each movie’s info (poster, title, etc.).
+
+
+## State Management (Zustand)
+
+for this i am using another example code. A simple add to cart ecommerce code
+
+// app/page.jsx
+
+```jsx
+"use client"
+
+import Cart from "../components/Cart"
+import ProductList from "../components/ProductList"
+import {PRODUCTS} from "../components/products"
+
+
+export default function Home(){
+  
+
+  return(
+    <div className="">
+      <h3>Welcome to store</h3>
+      <ProductList products={PRODUCTS} />
+      <Cart />
+    </div>
+  )
+}
+```
+
+in the components file these are the products data
+
+components/products.jsx
+
+```jsx
+export const PRODUCTS = [
+  {
+    id: 1,
+    name: "Phone",
+    description: "A modern mobile phone with a smart display, latest version",
+  },
+  {
+    id: 2,
+    name: "Laptop",
+    description: "Lightweight laptop with 16GB RAM and long battery life",
+  },
+  {
+    id: 3,
+    name: "Wireless Headphones",
+    description: "Over-ear bluetooth headphones with noise cancellation",
+  },
+  {
+    id: 4,
+    name: "Smartwatch",
+    description: "Water-resistant smartwatch with fitness tracking and GPS",
+  },
+  {
+    id: 5,
+    name: "Tablet",
+    description: "10-inch tablet with high-resolution display and stylus support",
+  },
+  {
+    id: 6,
+    name: "Coffee Maker",
+    description: "Programmable drip coffee maker with timer and thermal carafe",
+  },
+  {
+    id: 7,
+    name: "Electric Kettle",
+    description: "Rapid-boil electric kettle with temperature control",
+  },
+  {
+    id: 8,
+    name: "Bluetooth Speaker",
+    description: "Portable speaker with deep bass and 12-hour battery life",
+  },
+  {
+    id: 9,
+    name: "Gaming Controller",
+    description: "Ergonomic wireless controller compatible with multiple platforms",
+  },
+  {
+    id: 10,
+    name: "External SSD",
+    description: "Fast USB-C external SSD with hardware encryption support",
+  },
+  {
+    id: 11,
+    name: "Desk Lamp",
+    description: "Adjustable LED desk lamp with touch controls and dimmer",
+  },
+  {
+    id: 12,
+    name: "Backpack",
+    description: "Durable laptop backpack with multiple compartments and rain cover",
+  },
+];
+
+```
+
+Now for the main files
+
+Before we use the products, we need to have a centralized state management solution for which we will use zustand
+
+we'll make a sort of "schema". make a newfolder with the name store and file cartStore.jsx
+
+```jsx
+import { create } from "zustand";
+
+export const useCartStore = create((set) => ({
+    cart: [],
+
+    addToCart: (product) => set((state) => ({cart: [...state.cart, product]})),
+
+    removeFromCart: (productId) => 
+        set((state) => ({
+            cart: state.cart.filter(product => product.id !== productId)
+        })),
+
+    clearCart: () => set({cart: []}) ,
+}))
+```
+
+Notice how we are doing `cart: [...state.cart, product]` in the addToCart thats because we cant just append it to list. we are creating a new list with the same name and `...state.cart` pushes the element from the old cart into the new cart and the `, product` the new product is added in as well.
+
+Then we have Cart.jsx in components
+
+```jsx
+"use client"
+import { useCartStore } from '../store/cartStore'
+
+const Cart = () =>{
+
+    const {cart, removeFromCart, clearCart} = useCartStore()
+
+    return(
+        <div>
+            <h2>Cart</h2>
+            {cart.map((product) =>(
+                <div key={product.id}>
+                    <span>{product.name}</span>
+                    <button
+                    onClick={() => removeFromCart(product.id)}>
+                        Remove
+                    </button>
+                </div>
+            ))}
+            {cart.length > 0 && (
+                <button onClick={clearCart}>Clear Cart</button>
+            )}
+        </div>
+    )
+}
+
+export default Cart;
+```
+
+See we didnt used useState here, we imported the functions and pass in the values when the button is clicked.
+
+for the product cards
+make ProductList.jsx in component folder
+
+```jsx
+"use client"
+
+import { useCartStore } from '../store/cartStore'
+
+const ProductList = ({products}) =>{
+
+    const addToCart = useCartStore((state) => state.addToCart)
+
+    return(
+        <div>
+            {products?.map((product) =>(
+                <div key={product.id}>
+                    <h3>{product.name}</h3>
+                    <p>{product.description}</p>
+                    <button onClick={() => addToCart(product)}>
+                        Add to cart
+                    </button>
+                </div>
+            ))}
+        </div>
+    )
+}
+
+export default ProductList;
+```
+
+Again here we are passing in the state and mapping over the Products
+
+### Nested States (Immer)
+
+When we use nested data, it becomes harder to push the elements into the list. like before, we need to create a new list, add the elements from old list to the new list and then add the new element. If the data is nested then you have to do this for every row and nested list.
+
+The solution for that is to use Immer (produce) function
+
+```jsx
+import { create } from "zustand";
+import { produce } from "immer";
+
+const initialState = {
+    user: {
+        id: "user123",
+        friends: ["jack", "jessica", "paul"],
+        profile: {
+            name: "John Doe",
+            email: "john.doe@example.com",
+            address: {
+                street: "123 Main St",
+                city: "NewYork",
+                zipcode: "123456",
+            },
+        },
+    },
+};
+
+export const useStore = create((set) =>({
+    ...initialState,
+    updateAddressStreet: (street) =>
+        set(
+            produce((state) =>{
+                state.user.profile.address.street = street;
+            })
+        )
+}));
+```
