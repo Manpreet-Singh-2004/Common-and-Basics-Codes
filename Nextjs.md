@@ -179,6 +179,17 @@ Firstly you would need to deploy your project in order to get the `CLERK_WEBHOOK
 
 After doing that, check the logs of your deployed app
 
+
+Go to https://clerk.com/docs/guides/development/webhooks/syncing
+
+To get your 
+
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+
+CLERK_SECRET_KEY
+
+CLERK_WEBHOOK_SIGNING_SECRET
+
 ```ts
 // app/api/webhooks/route.ts
 
