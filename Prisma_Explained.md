@@ -50,12 +50,11 @@ npx prisma generate
 
 ```ts
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User{
@@ -63,9 +62,24 @@ model User{
   name String
 }
 ```
-This file is auto generated on init.
+This file is auto-generated on init.
 
-Note the provider `prisma-client-js` by default the provider is `prisma-client` and there is also an `output` as well like this
+*Note: Prisma now uses prisma.config.ts file and in the datasource it takes the url from the env file, also prisma is going back to its default `provider = "prisma-client"` instead of prisma-client-js*
+```ts
+import { defineConfig, env } from "prisma/config";
+
+// Rest of the code
+
+  datasource: {
+    url: env("DATABASE_URL"),
+  },
+```
+
+It is mostly used with Neon DB, which uses PostgreSQL internally. Check the following resources for more information:
+
+[Use with Neon DB](https://www.prisma.io/docs/orm/overview/databases/neon)
+
+[New Rust-free compiler](https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/no-rust-engine#3-install-the-driver-adapter)
 
 ```ts
 generator client { 
@@ -100,4 +114,5 @@ main()
     .finally(async () =>{
         await prisma.$disconnect()
     })
+
 ```
