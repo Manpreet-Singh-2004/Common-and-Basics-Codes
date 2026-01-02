@@ -21,6 +21,13 @@ npx prisma init --datasource-provider postgresql
 
 This is to be used if you are using postgreSQL
 
+To test whether your schema is working, use the command
+
+```bash
+npx prisma studio
+```
+This will open a GUI version of your schema. If this opens up and you are able to see your tables, then it's working.
+
 ## Migration and Generation
 
 In your Package.json under scripts add this
@@ -116,3 +123,4 @@ main()
     })
 
 ```
+
