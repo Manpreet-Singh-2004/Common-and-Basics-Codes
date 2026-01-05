@@ -30,6 +30,10 @@
       + [Centralized Error Handling](#centralized-error-handling)
       + [Asynchronous Error Handling](#asynchronous-error-handling)
       + [Input Validation](#input-validation)
+	* [Clerk](#clerk)
+      + [ClerkMiddleware vs requireAuth](#clerkmiddleware-vs-requireauth)
+      + [Events](#events)
+      + [Connecting frontend](#connecting-frontend)
 
 
 
@@ -1046,8 +1050,64 @@ While the userController checks for some empty fields, it's a good practice to u
 
 ***
 
+## Clerk
+to use clerk in your express app you first need to install the clerk express package
+```bash
+npm install @clerk/express
+```
+in your .env file set up the following
+```json
+CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+```
+### ClerkMiddleware vs requireAuth
+[`clerkMiddleware()`](https://clerk.com/docs/reference/express/overview#clerk-middleware) is basically going to check browser cookies for any headers or data left, if it finds a cookie, it will try to use that login credentials.
+
+[`requireAuth()`](https://clerk.com/docs/expressjs/getting-started/quickstart#protect-your-routes-using-require-auth) This basically forces the users to login. It is more strict as compared to clerkMiddleware.
+
+### Events
+For events like user creation, updation, deletion, you would need to have `verifyWebhook`
+you can use it like this
+```ts
+const  evt  = (await  verifyWebhook(req)) as  WebhookEvent;
+// Or as 
+const evt = await verifyWebhook(req)
+```
+WebhookEvent defines the type of event kinda.
+This `evt` contains many fields like data, type and so on.
+In your backend you would want to create a Switch case and use 
+```ts
+const  eventType  =  evt.type
+switch (eventType){
+case  "user.created":
+	await  handleUserCreated(evt);
+	break;
+	// Rest of the code
+```
+In your index.js make sure to have the route like this
+```ts
+app.post(
+	"/webhooks/clerk",
+	express.raw({type:  "application/json"}),
+	handleWebhook
+)
+```
+You wont be able to test the backend using postman or any other curl commands because clerk uses Svix for headers, so you need to deploy the app (like on NGROK or Railway) to test the webhooks by sending in test user data
+
+*Note -: Keep in mind that webhooks can run multiple times in OAuth because clerk promises to give atleast 1 email back.*
+
+### Connecting frontend
+
+Clerk by default picks up from the `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` 
+
+You just need to use clerk ui and catch all segments.
+For eg -: in Next.Js you will make the folder *sign-in/[[...sign-in]]/page.tsx* and just return `<SignIn />` from clerk. Wrap the layout.tsx with ClerkProvider.
+
+
+
 **Made with ❤️ by Manpreet Singh**
 
 LinkedIn -: https://www.linkedin.com/in/manpreetsingh18-ufv/
+
 
 
