@@ -263,6 +263,8 @@ Since we are using clerk for this project, we need to go to clerk dashboard > Co
 
 ## Clerk
 
+You can also add `username` field in clerk, so that on a new sign up clerk will always ask for a unique username and using webhooks you can send it to your database
+
 ### Middleware.ts
 
 In the root of the project we will make a `middleware.ts`. Here we will be 
