@@ -50,6 +50,11 @@ For deployment on **Vercel** you would get an error if you have seperately insta
   }
 ```
 
+To install the dependencies use the command -:
+```bash
+npm i lightningcss-win32-x64-msvc @tailwindcss/oxide-win32-x64-msvc --save-dev --force
+```
+
 # .env.local
 
 ```jsx
