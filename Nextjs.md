@@ -43,11 +43,21 @@ npx create-next-app@latest [project-name] [options]
 ### Vercel Deployment
 For deployment on **Vercel** you would get an error if you have seperately installed Oxide and Lightningcss in `Package.json`. That is because these dependencies are win32 x64 specific, and the vercel servers operate on Linux, hence to fix it we will shift those dependenceies to *optionalDependencies* this will basically skip the installation on non supported OS.
 
-```bash
-  "optionalDependencies": {
-    "@tailwindcss/oxide-win32-x64-msvc": "latest",
-    "lightningcss-win32-x64-msvc": "latest"
-  }
+```json
+"dependencies":{
+  "@rollup/rollup-win32-x64-msvc": "^4.57.1",
+},
+"devDependencies":{
+  "@tailwindcss/oxide-win32-x64-msvc": "latest",
+  "lightningcss-win32-x64-msvc": "latest"
+}
+```
+Then after installation move them to optional dependencies -:
+```json
+"optionalDependencies":{
+  "@tailwindcss/oxide-win32-x64-msvc": "latest",
+  "lightningcss-win32-x64-msvc": "latest"
+}
 ```
 
 To install the dependencies use the command -:
