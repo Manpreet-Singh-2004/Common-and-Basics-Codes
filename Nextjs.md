@@ -45,22 +45,26 @@ For deployment on **Vercel** you would get an error if you have seperately insta
 
 ```json
 "dependencies":{
-  "@rollup/rollup-win32-x64-msvc": "^4.57.1",
+  "@rollup/rollup-win32-x64-msvc": "latest",
 },
 "devDependencies":{
   "@tailwindcss/oxide-win32-x64-msvc": "latest",
-  "lightningcss-win32-x64-msvc": "latest"
+  "lightningcss-win32-x64-msvc": "latest",
 }
 ```
+Then install using the command `npm i`
+
+
 Then after installation move them to optional dependencies -:
 ```json
 "optionalDependencies":{
   "@tailwindcss/oxide-win32-x64-msvc": "latest",
-  "lightningcss-win32-x64-msvc": "latest"
+  "lightningcss-win32-x64-msvc": "latest",
+  "@rollup/rollup-win32-x64-msvc": "latest",
 }
 ```
 
-To install the dependencies use the command -:
+To install the dependencies seperately use the command -:
 ```bash
 npm i lightningcss-win32-x64-msvc @tailwindcss/oxide-win32-x64-msvc --save-dev --force
 ```
