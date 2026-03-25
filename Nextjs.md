@@ -35,8 +35,10 @@
 Install using
 
 ```bash
-npx create-next-app@latest [project-name] [options]
+pnpm create next-app@latest [project-name] [options]
 ```
+
+using **pnpm** as package manager will help in resolving native binaries, and is also considered as a faster manager as compared to npm. You won't have the troubleshooting errors mentioned below.
 
 ## Troubleshooting
 
@@ -52,7 +54,7 @@ For deployment on **Vercel** you would get an error if you have seperately insta
   "lightningcss-win32-x64-msvc": "latest",
 }
 ```
-Then install using the command `npm i`
+Then install using the command `pnpm i` OR `npm i`
 
 
 Then after installation move them to optional dependencies -:
